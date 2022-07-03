@@ -62,4 +62,5 @@ dependencies {
     implementation(libs.paging.guava)
     implementation(libs.paging.compose)
     implementation(libs.retrofit)
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
 }
