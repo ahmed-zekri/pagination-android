@@ -35,84 +35,89 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val items = MainRepository(RetrofitService.getInstance()).getAllCars()
-                        .collectAsLazyPagingItems()
-                    LazyColumn {
-                        pagingLoadStateItem(
-                            loadState = items.loadState.prepend,
-                            keySuffix = "prepend",
-                            loading = { CircularProgressIndicator() },
-                            error = { },
-                        )
+                    Column(Modifier.fillMaxSize()) {
+                        val items =
+                            MainRepository.getInstance(RetrofitService.getInstance()).getAllCars()
+                                .collectAsLazyPagingItems()
+                        LazyColumn {
+                            pagingLoadStateItem(
+                                loadState = items.loadState.prepend,
+                                keySuffix = "prepend",
+                                loading = { CircularProgressIndicator() },
+                                error = { },
+                            )
 
-                        items(items) { item ->
-                            Card(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(15.dp)
-                                    .clickable { },
-                                elevation = 10.dp
-                            ) {
-                                Column(
-                                    modifier = Modifier.padding(15.dp)
+                            items(items) { item ->
+                                Card(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(15.dp)
+                                        .clickable { },
+                                    elevation = 10.dp
                                 ) {
-                                    Text(
-                                        buildAnnotatedString {
-                                            append(" Car brand")
-                                            withStyle(
-                                                style = SpanStyle(
-                                                    fontWeight = FontWeight.W900,
-                                                    color = Color(0xFF4552B8)
-                                                )
-                                            ) {
-                                                append((" " + item?.Model))
+                                    Column(
+                                        modifier = Modifier.padding(15.dp)
+                                    ) {
+                                        Text(
+                                            buildAnnotatedString {
+                                                append(" Car brand")
+                                                withStyle(
+                                                    style = SpanStyle(
+                                                        fontWeight = FontWeight.W900,
+                                                        color = Color(0xFF4552B8)
+                                                    )
+                                                ) {
+                                                    append((" " + item?.Model))
+                                                }
                                             }
-                                        }
-                                    )
-                                    Text(
-                                        buildAnnotatedString {
-                                            append("The car was manufactured in ")
-                                            withStyle(style = SpanStyle(fontWeight = FontWeight.W900)) {
-                                                append(" " + item?.Year.toString())
+                                        )
+                                        Text(
+                                            buildAnnotatedString {
+                                                append("The car was manufactured in ")
+                                                withStyle(style = SpanStyle(fontWeight = FontWeight.W900)) {
+                                                    append(" " + item?.Year.toString())
+                                                }
+
                                             }
+                                        )
 
-                                        }
-                                    )
+                                        Text(
+                                            buildAnnotatedString {
+                                                append("The car category is ")
+                                                withStyle(style = SpanStyle(fontWeight = FontWeight.W900)) {
+                                                    append((" " + item?.Category))
+                                                }
 
-                                    Text(
-                                        buildAnnotatedString {
-                                            append("The car category is ")
-                                            withStyle(style = SpanStyle(fontWeight = FontWeight.W900)) {
-                                                append(item?.Category ?: "")
-                                            }
-
-                                        })
+                                            })
 
 
-                                    Text(
-                                        buildAnnotatedString {
-                                            append("It's make is")
-                                            withStyle(style = SpanStyle(fontWeight = FontWeight.W900)) {
-                                                append(item?.Make ?: "")
-                                            }
+                                        Text(
+                                            buildAnnotatedString {
+                                                append("It's make is")
+                                                withStyle(style = SpanStyle(fontWeight = FontWeight.W900)) {
+                                                    append((" " + item?.Make))
+                                                }
 
-                                        })
+                                            })
+                                    }
                                 }
+
                             }
 
+                            pagingLoadStateItem(
+                                loadState = items.loadState.append,
+                                keySuffix = "append",
+                                loading = {
+                                    Column(modifier = Modifier.fillMaxWidth()) {
+                                        CircularProgressIndicator(Modifier.align(Alignment.CenterHorizontally))
+                                    }
+                                },
+                                error = { },
+                            )
                         }
 
-                        pagingLoadStateItem(
-                            loadState = items.loadState.append,
-                            keySuffix = "append",
-                            loading = {
-                                Column(modifier = Modifier.fillMaxWidth()) {
-                                    CircularProgressIndicator(Modifier.align(Alignment.CenterHorizontally))
-                                }
-                            },
-                            error = { },
-                        )
                     }
+
 
                 }
             }
