@@ -34,11 +34,15 @@ dependencyResolutionManagement {
             alias('retrofit').to("com.squareup.retrofit2:retrofit:$retrofit_version")
 
 
+            alias('fa').to("com.github.Gurupreet:FontAwesomeCompose:$fa_version")
+
+
         }
     }
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
 }
 rootProject.name = "Android paging3"

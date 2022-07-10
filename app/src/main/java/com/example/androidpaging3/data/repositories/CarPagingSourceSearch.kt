@@ -5,14 +5,19 @@ import androidx.paging.PagingState
 import com.example.androidpaging3.data.dto.Car
 import com.example.androidpaging3.data.remote.RetrofitService
 
-class CarPagingSource private constructor(private val apiService: RetrofitService) :
+class CarPagingSourceSearch private constructor(private val apiService: RetrofitService) :
     PagingSource<Int, Car>() {
-    companion object {
-        private var instance: CarPagingSource? = null
+    lateinit var searchTerm: String
 
-        fun getInstance(): PagingSource<Int, Car> {
+    companion object {
+        private var instance: CarPagingSourceSearch? = null
+
+        fun getInstance(searchTerm: String = ""): PagingSource<Int, Car> {
+
             if (instance == null)
-                instance = CarPagingSource(RetrofitService.getInstance())
+                instance = CarPagingSourceSearch(RetrofitService.getInstance())
+
+            instance!!.searchTerm = searchTerm
             return instance!!
         }
     }
@@ -22,9 +27,10 @@ class CarPagingSource private constructor(private val apiService: RetrofitServic
 
         return try {
             val position = params.key ?: 1
-            val response = apiService.getCars(position)
+            val response = apiService.searchCar(position, search = searchTerm)
             LoadResult.Page(
-                data = response.body()?: listOf(), prevKey = if (position == 1) null else position - 1,
+                data = response.body() ?: listOf(),
+                prevKey = if (position == 1) null else position - 1,
                 nextKey = position + 1
             )
         } catch (e: Exception) {

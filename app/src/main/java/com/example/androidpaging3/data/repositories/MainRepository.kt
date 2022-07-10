@@ -30,7 +30,20 @@ class MainRepository private constructor(private val retrofitService: RetrofitSe
                 initialLoadSize = 2
             ),
             pagingSourceFactory = {
-                CarPagingSource(retrofitService)
+                CarPagingSource.getInstance()
+            }, initialKey = 1
+        ).flow
+    }
+
+    fun getSearchCars(s: String): Flow<PagingData<Car>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 15,
+                enablePlaceholders = false,
+                initialLoadSize = 2
+            ),
+            pagingSourceFactory = {
+                CarPagingSourceSearch.getInstance(s)
             }, initialKey = 1
         ).flow
     }
