@@ -64,7 +64,10 @@ fun ItemsList() {
                 textStyle = TextStyle.Default
 
             ) {
-                coroutineScope.launch { hotTypingFlow.emit(this@InputTextField) }
+                coroutineScope.launch {
+                    if (this@InputTextField.isNotBlank())
+                        hotTypingFlow.emit(this@InputTextField)
+                }
 
             }
             val itemsPagingData = items.value.collectAsLazyPagingItems()
