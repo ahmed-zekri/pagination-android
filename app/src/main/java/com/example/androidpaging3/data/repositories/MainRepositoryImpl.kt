@@ -4,16 +4,16 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.androidpaging3.data.dto.Car
-import com.example.androidpaging3.data.remote.RetrofitService
+import com.example.androidpaging3.domain.repositories.MainRepository
 import kotlinx.coroutines.flow.Flow
 
-class MainRepository private constructor(private val retrofitService: RetrofitService) {
+class MainRepositoryImpl private constructor() : MainRepository {
     companion object {
 
-        private var instance: MainRepository? = null
-        fun getInstance(retrofitService: RetrofitService): MainRepository {
+        private var instance: MainRepositoryImpl? = null
+        fun getInstance(): MainRepositoryImpl {
             if (instance == null)
-                instance = MainRepository(retrofitService)
+                instance = MainRepositoryImpl()
             return instance!!
 
         }
@@ -21,7 +21,7 @@ class MainRepository private constructor(private val retrofitService: RetrofitSe
 
     }
 
-    fun getAllCars(): Flow<PagingData<Car>> {
+    override fun getAllCars(): Flow<PagingData<Car>> {
 
         return Pager(
             config = PagingConfig(
@@ -35,7 +35,7 @@ class MainRepository private constructor(private val retrofitService: RetrofitSe
         ).flow
     }
 
-    fun getSearchCars(s: String): Flow<PagingData<Car>> {
+    override fun getSearchCars(s: String): Flow<PagingData<Car>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 15,

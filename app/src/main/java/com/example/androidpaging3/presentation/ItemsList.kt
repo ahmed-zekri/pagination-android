@@ -10,7 +10,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -20,8 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.example.androidpaging3.data.common.pagingLoadStateItem
-import com.example.androidpaging3.data.remote.RetrofitService
-import com.example.androidpaging3.data.repositories.MainRepository
+import com.example.androidpaging3.data.repositories.MainRepositoryImpl
 import com.guru.fontawesomecomposelib.FaIcon
 import com.guru.fontawesomecomposelib.FaIcons
 import kotlinx.coroutines.FlowPreview
@@ -40,14 +38,14 @@ fun ItemsList() {
     }
     val items = remember {
         mutableStateOf(
-            MainRepository.getInstance(RetrofitService.getInstance()).getAllCars()
+            MainRepositoryImpl.getInstance().getAllCars()
 
         )
     }
     LaunchedEffect(key1 = true) {
         hotTypingFlow.debounce(500).collect {
             items.value =
-                MainRepository.getInstance(RetrofitService.getInstance()).getSearchCars(it)
+                MainRepositoryImpl.getInstance().getSearchCars(it)
         }
 
 
@@ -139,11 +137,13 @@ fun ItemsList() {
                             CircularProgressIndicator(Modifier.align(Alignment.CenterHorizontally))
                         }
                     },
-                    error = { FaIcon(faIcon = FaIcons.CloudRain, size = 25.dp) },
+                    error = {
+                        FaIcon(faIcon = FaIcons.CloudRain, size = 25.dp) },
                 )
             }
 
         }
 
     }
+
 }
