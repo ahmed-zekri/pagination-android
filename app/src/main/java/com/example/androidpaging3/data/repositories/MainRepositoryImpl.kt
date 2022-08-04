@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.Flow
 class MainRepositoryImpl private constructor() : MainRepository {
     companion object {
 
-        private var instance: MainRepositoryImpl? = null
-        fun getInstance(): MainRepositoryImpl {
+        private var instance: MainRepository? = null
+        fun getInstance(): MainRepository {
             if (instance == null)
                 instance = MainRepositoryImpl()
             return instance!!
